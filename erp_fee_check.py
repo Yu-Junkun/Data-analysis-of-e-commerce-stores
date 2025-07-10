@@ -369,8 +369,6 @@ if selected_tab == "运费计算":
             })
         else:
             st.error("未找到该地区或快递公司的价格表")
-    else:
-        st.error("请输入正确的重量")
     
     st.divider()
     
