@@ -141,9 +141,10 @@ def calc_fee(weight, express_company, area):
         elif weight <= 3:
             return price_table[3]
         else:
-            weight = ceil(weight)
+            return None
+            # weight = ceil(weight)
             # 超过3kg的计算方式: 首重 + (重量-1)*续重，其中重量需要向上取整
-            return first_weight + (weight - 1) * additional_weight
+            # return first_weight + (weight - 1) * additional_weight
     
     # 圆通、韵达的价格计算逻辑
     elif express_company in ['圆通', '韵达']:
