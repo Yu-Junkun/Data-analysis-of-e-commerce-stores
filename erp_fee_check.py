@@ -13,12 +13,12 @@ from math import ceil
 import streamlit as st
 
 # 打开特定路径工作簿，工作表
-def worksheet():
-    workbook = pandas.read_excel('./20250709_104148.xlsx')
-    worksheet = workbook['B2C明细']
-    # 读取工作表中“重量”列数据
-    weight_list = worksheet['重量'].tolist()
-    return weight_list
+# def worksheet():
+#     workbook = pandas.read_excel('./20250709_104148.xlsx')
+#     worksheet = workbook['B2C明细']
+#     # 读取工作表中“重量”列数据
+#     weight_list = worksheet['重量'].tolist()
+#     return weight_list
         
 # 构建快递费用字典，根据快递公司、地区、公斤段、首重、续重计算
 def calc_fee(weight, express_company, area):
@@ -351,8 +351,8 @@ with st.sidebar:
 if selected_tab == "运费计算":
     st.title("运费计算")
     # 用户输入目的地与重量段
-    area = st.text_input("请输入目的地省份（例外：深圳地区，请输入“深圳”）")
-    weight = float(st.text_input("请输入重量（kg）"))
+    area = st.text_input("请输入目的地省份（例外：直辖市，深圳）")
+    weight = st.text_input("请输入重量（kg）")
     # express_company = st.selectbox("请选择快递公司", ("顺丰", "中通", "圆通", "韵达"))
     # 计算按钮
     if st.button("计算运费"):
@@ -369,6 +369,8 @@ if selected_tab == "运费计算":
             })
         else:
             st.error("未找到该地区或快递公司的价格表")
+    else:
+        st.error("请输入正确的重量")
     
     st.divider()
     
