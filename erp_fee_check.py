@@ -12,6 +12,15 @@ import pandas
 from math import ceil
 import streamlit as st
 
+# 打开特定路径工作簿，工作表
+# def worksheet():
+#     workbook = pandas.read_excel('./20250709_104148.xlsx')
+#     worksheet = workbook['B2C明细']
+#     # 读取工作表中“重量”列数据
+#     weight_list = worksheet['重量'].tolist()
+#     return weight_list
+        
+# 构建快递费用字典，根据快递公司、地区、公斤段、首重、续重计算
 def calc_fee(weight, express_company, area):
     """
     计算从临沂到指定地区的物流费用
@@ -282,6 +291,51 @@ def calc_fee(weight, express_company, area):
             # 解析：1-3KG共2KG，按续重_1_3kg计算；超过3KG的部分按续重_3kg_plus计算
             #return first_1kg + 2 * 续重_1_3kg + (weight - 3) * 续重_3kg_plus
             return first_1kg + (weight - 1) * 续重_3kg_plus
+    elif express_company == '（中通/德邦）快运':
+        price_data = {
+            '北京': [18, 1.8, 1.71, 1.71],
+            '天津': [18, 1.51, 1.43, 1.43],
+            '安徽': [18, 1.39, 1.32, 1.32],
+            '河北': [18, 1.65, 1.57, 1.57],
+            '山东': [18, 1.16, 1.1, 1.1],
+            '黑龙江': [18, 2.46, 2.34, 2.34],
+            '吉林': [18, 1.96, 1.86, 1.86],
+            '辽宁': [18, 1.93, 1.83, 1.83],
+            '山西': [18, 1.57, 1.49, 1.49],
+            '江西': [18, 1.78, 1.69, 1.69],
+            '湖南': [18, 1.88, 1.79, 1.79],
+            '湖北': [18, 1.76, 1.67, 1.67],
+            '河南': [18, 1.42, 1.35, 1.35],
+            '江苏': [18, 1.29, 1.22, 1.22],
+            '上海': [18, 1.34, 1.27, 1.27],
+            '浙江': [18, 1.4, 1.33, 1.33],
+            '广东': [18, 1.93, 1.83, 1.83],
+            '深圳': [18, 1.93, 1.83, 1.83],
+            '福建': [18, 1.98, 1.88, 1.88],
+            '重庆': [18, 2.25, 2.14, 2.14],
+            '四川': [18, 2.12, 2.01, 2.01],
+            '陕西': [18, 1.92, 1.82, 1.82],
+            '内蒙': [25.0, 2.35, 2.23, 2.23],
+            '云南': [25.0, 2.6, 2.47, 2.47],
+            '广西': [25.0, 2.08, 1.98, 1.98],
+            '青海': [25.0, 3.48, 3.31, 3.31],
+            '甘肃': [25.0, 3.07, 2.92, 2.92],
+            '贵州': [25.0, 2.45, 2.33, 2.33],
+            '宁夏': [25.0, 2.06, 1.96, 1.96],
+            '海南': [50.0, 3.53, 3.36, 3.36],
+            '西藏': [50.0, 6.16, 5.86, 5.86],
+            '新疆': [50.0, 4.37, 4.16, 4.16]
+        }
+        # 检查地区是否在价格表中
+        if area not in price_data:
+            return None  # 未知地区
+        prices = price_data[area]
+        weight = ceil(weight)
+        # 检查重量是否在该地区的价格范围内
+        if weight <= 50:
+            return prices[0] + (weight - 1) * prices[1]
+        else:
+            return prices[2] + (weight - 1) * prices[3]
     else:
         return None  # 不支持的快递公司返回None    
 
@@ -293,7 +347,7 @@ if selected_tab == "运费计算":
     st.title("运费计算")
     # 用户输入目的地与重量段
     area = st.text_input("请输入目的地省份（例外：直辖市，深圳）")
-    weight = st.number_input("请输入重量（kg）", min_value=0, max_value=50, step=2, value=None)
+    weight = st.number_input("请输入重量（kg）", min_value=0, max_value=9999, step=2, value=None)
     # express_company = st.selectbox("请选择快递公司", ("顺丰", "中通", "圆通", "韵达"))
     # 计算按钮
     if st.button("计算运费"):
@@ -302,16 +356,42 @@ if selected_tab == "运费计算":
         zt_fee = calc_fee(weight, '中通', area)
         yt_fee = calc_fee(weight, '圆通', area)
         yd_fee = calc_fee(weight, '韵达', area)
+        wt_fee = calc_fee(weight, '（中通/德邦）快运', area)
+        
         if sf_fee or zt_fee or yt_fee or yd_fee is not None:
             st.success(f"从临沂到{area}的重量为{weight}kg的费用为: ")
             st.dataframe({
-                '快递公司': ['顺丰', '中通', '圆通', '韵达'],
-                '费用（元/kg）': [sf_fee, zt_fee, yt_fee, yd_fee]
+                '快递公司': ['顺丰', '中通', '圆通', '韵达', '快运（中通/德邦）'],
+                '费用（元/kg）': [sf_fee, zt_fee, yt_fee, yd_fee, wt_fee]
             })
         else:
             st.error("未找到该地区或快递公司的价格表")
     
     st.divider()
-
+    
+# if __name__ == '__main__':
+#     option_select = str(input("请选择功能：\n1. 计算费用\n2. 退出\n"))
+#     if option_select == '1':
+#         while True:
+#             # 示例重量和目的地
+#             #express_company = input("请输入快递公司（如：顺丰、圆通、韵达、申通、中通）：")
+#             weight = float(input("请输入重量（kg）："))  # 单位：kg
+#             area = input("请输入目的地（如：北京、上海、广州、深圳等）：")
+        
+#             # 调用函数计算费用
+            
+#             sf_fee = calc_fee(weight, '顺丰', area)
+#             zt_fee = calc_fee(weight, '中通', area)
+#             yt_fee = calc_fee(weight, '圆通', area)
+#             yd_fee = calc_fee(weight, '韵达', area)
+            
+#             if sf_fee or zt_fee or yt_fee or yd_fee is not None:
+#                 print(f"从临沂到{area}的重量为{weight}kg的费用为: \n顺丰：{sf_fee}元 \n中通：{zt_fee}元 \n圆通：{yt_fee}元 \n韵达：{yd_fee}元")
+#             else:
+#                 print("未找到该地区或快递公司的价格表")
+    
+    
+    
+    
     
     
