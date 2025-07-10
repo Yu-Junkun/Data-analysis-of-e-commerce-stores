@@ -10,6 +10,7 @@
 
 import pandas
 from math import ceil
+import streamlit as st
 
 # 打开特定路径工作簿，工作表
 def worksheet():
@@ -342,256 +343,58 @@ def calc_fee(weight, express_company, area):
     # 其他快递公司的逻辑可以在这里继续添加
     else:
         return None  # 不支持的快递公司返回None    
+
+# 创建边栏
+with st.sidebar:
+    selected_tab = st.radio("选择功能", ["运费计算", "开发中"])
     
+if selected_tab == "运费计算":
+    st.title("运费计算")
+    # 用户输入目的地与重量段
+    area = st.text_input("请输入目的地省份（例外：深圳地区，请输入“深圳”）")
+    weight = float(st.text_input("请输入重量（kg）"))
+    # express_company = st.selectbox("请选择快递公司", ("顺丰", "中通", "圆通", "韵达"))
+    # 计算按钮
+    if st.button("计算运费"):
+        # 调用运费计算函数
+        sf_fee = calc_fee(weight, '顺丰', area)
+        zt_fee = calc_fee(weight, '中通', area)
+        yt_fee = calc_fee(weight, '圆通', area)
+        yd_fee = calc_fee(weight, '韵达', area)
+        if sf_fee or zt_fee or yt_fee or yd_fee is not None:
+            st.success(f"从临沂到{area}的重量为{weight}kg的费用为: ")
+            st.dataframe({
+                '快递公司': ['顺丰', '中通', '圆通', '韵达'],
+                '费用（元/kg）': [sf_fee, zt_fee, yt_fee, yd_fee]
+            })
+        else:
+            st.error("未找到该地区或快递公司的价格表")
     
-if __name__ == '__main__':
-    option_select = str(input("请选择功能：\n1. 计算费用\n2. 退出\n"))
-    if option_select == '1':
-        while True:
-            # 示例重量和目的地
-            #express_company = input("请输入快递公司（如：顺丰、圆通、韵达、申通、中通）：")
-            weight = float(input("请输入重量（kg）："))  # 单位：kg
-            area = input("请输入目的地（如：北京、上海、广州、深圳等）：")
+    st.divider()
+    
+# if __name__ == '__main__':
+#     option_select = str(input("请选择功能：\n1. 计算费用\n2. 退出\n"))
+#     if option_select == '1':
+#         while True:
+#             # 示例重量和目的地
+#             #express_company = input("请输入快递公司（如：顺丰、圆通、韵达、申通、中通）：")
+#             weight = float(input("请输入重量（kg）："))  # 单位：kg
+#             area = input("请输入目的地（如：北京、上海、广州、深圳等）：")
         
-            # 调用函数计算费用
+#             # 调用函数计算费用
             
-            sf_fee = calc_fee(weight, '顺丰', area)
-            zt_fee = calc_fee(weight, '中通', area)
-            yt_fee = calc_fee(weight, '圆通', area)
-            yd_fee = calc_fee(weight, '韵达', area)
+#             sf_fee = calc_fee(weight, '顺丰', area)
+#             zt_fee = calc_fee(weight, '中通', area)
+#             yt_fee = calc_fee(weight, '圆通', area)
+#             yd_fee = calc_fee(weight, '韵达', area)
             
-            if sf_fee or zt_fee or yt_fee or yd_fee is not None:
-                print(f"从临沂到{area}的重量为{weight}kg的费用为: \n顺丰：{sf_fee}元 \n中通：{zt_fee}元 \n圆通：{yt_fee}元 \n韵达：{yd_fee}元")
-            else:
-                print("未找到该地区或快递公司的价格表")
+#             if sf_fee or zt_fee or yt_fee or yd_fee is not None:
+#                 print(f"从临沂到{area}的重量为{weight}kg的费用为: \n顺丰：{sf_fee}元 \n中通：{zt_fee}元 \n圆通：{yt_fee}元 \n韵达：{yd_fee}元")
+#             else:
+#                 print("未找到该地区或快递公司的价格表")
     
     
     
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-
-
