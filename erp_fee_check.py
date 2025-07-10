@@ -8,18 +8,9 @@
 @Desc    :   None
 '''
 
-import pandas
 from math import ceil
 import streamlit as st
 
-# 打开特定路径工作簿，工作表
-# def worksheet():
-#     workbook = pandas.read_excel('./20250709_104148.xlsx')
-#     worksheet = workbook['B2C明细']
-#     # 读取工作表中“重量”列数据
-#     weight_list = worksheet['重量'].tolist()
-#     return weight_list
-        
 # 构建快递费用字典，根据快递公司、地区、公斤段、首重、续重计算
 def calc_fee(weight, express_company, area):
     """
@@ -368,29 +359,6 @@ if selected_tab == "运费计算":
             st.error("未找到该地区或快递公司的价格表")
     
     st.divider()
-    
-# if __name__ == '__main__':
-#     option_select = str(input("请选择功能：\n1. 计算费用\n2. 退出\n"))
-#     if option_select == '1':
-#         while True:
-#             # 示例重量和目的地
-#             #express_company = input("请输入快递公司（如：顺丰、圆通、韵达、申通、中通）：")
-#             weight = float(input("请输入重量（kg）："))  # 单位：kg
-#             area = input("请输入目的地（如：北京、上海、广州、深圳等）：")
-        
-#             # 调用函数计算费用
-            
-#             sf_fee = calc_fee(weight, '顺丰', area)
-#             zt_fee = calc_fee(weight, '中通', area)
-#             yt_fee = calc_fee(weight, '圆通', area)
-#             yd_fee = calc_fee(weight, '韵达', area)
-            
-#             if sf_fee or zt_fee or yt_fee or yd_fee is not None:
-#                 print(f"从临沂到{area}的重量为{weight}kg的费用为: \n顺丰：{sf_fee}元 \n中通：{zt_fee}元 \n圆通：{yt_fee}元 \n韵达：{yd_fee}元")
-#             else:
-#                 print("未找到该地区或快递公司的价格表")
-    
-    
     
     
     
