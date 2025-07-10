@@ -342,24 +342,38 @@ if selected_tab == "运费计算":
     # express_company = st.selectbox("请选择快递公司", ("顺丰", "中通", "圆通", "韵达"))
     # 计算按钮
     if st.button("计算运费"):
-        # 调用运费计算函数
+        # 调用运费计算函数，未含快递税率6%，快运含税
         sf_fee = calc_fee(weight, '顺丰', area)
         zt_fee = calc_fee(weight, '中通', area)
         yt_fee = calc_fee(weight, '圆通', area)
         yd_fee = calc_fee(weight, '韵达', area)
-        wt_fee = calc_fee(weight, '（中通/德邦）快运', area)
+        wt_fee_taxed = calc_fee(weight, '（中通/德邦）快运', area)
+        
+        # 生成不含税费用列表，确保计算和格式化正确
+        fees_without_tax = [
+        f"{sf_fee:.2f}" if sf_fee is not None else None,
+        f"{zt_fee:.2f}" if zt_fee is not None else None,
+        f"{yt_fee:.2f}" if yt_fee is not None else None,
+        f"{yd_fee:.2f}" if yd_fee is not None else None,
+        f"{wt_fee_taxed / 1.09:.2f}" if wt_fee_taxed is not None else None
+        ]
+        
+        # 生成含税费用列表，确保计算和格式化正确
+        tax_included_fees = [
+        f"{sf_fee * 1.06:.2f}" if sf_fee is not None else None,
+        f"{zt_fee * 1.06:.2f}" if zt_fee is not None else None,
+        f"{yt_fee * 1.06:.2f}" if yt_fee is not None else None,
+        f"{yd_fee * 1.06:.2f}" if yd_fee is not None else None,
+        f"{wt_fee_taxed :.2f}" if wt_fee_taxed is not None else None  # 假设快运费用已经含税
+        ]
         
         if sf_fee or zt_fee or yt_fee or yd_fee is not None:
             st.success(f"从临沂到{area}的重量为{weight}kg的费用为: ")
             st.dataframe({
                 '快递公司': ['顺丰', '中通', '圆通', '韵达', '快运（中通/德邦）'],
-                '费用（元/kg）': [sf_fee, zt_fee, yt_fee, yd_fee, wt_fee]
+                '不含税费用（元）': fees_without_tax,
+                '含税费用（元）':tax_included_fees
             })
         else:
             st.error("未找到该地区或快递公司的价格表")
-    
     st.divider()
-    
-    
-    
-    
