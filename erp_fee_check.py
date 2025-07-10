@@ -352,10 +352,10 @@ if selected_tab == "运费计算":
     st.title("运费计算")
     # 用户输入目的地与重量段
     area = st.text_input("请输入目的地省份（例外：直辖市，深圳）")
-    weight = st.text_input("请输入重量（kg）")
+    weight = st.number_input("请输入重量（kg）", min_value=0， max_value=50, step=2，value=None)
     # express_company = st.selectbox("请选择快递公司", ("顺丰", "中通", "圆通", "韵达"))
     # 计算按钮
-    if weight = float(weight) and st.button("计算运费"):
+    if st.button("计算运费"):
         # 调用运费计算函数
         sf_fee = calc_fee(weight, '顺丰', area)
         zt_fee = calc_fee(weight, '中通', area)
