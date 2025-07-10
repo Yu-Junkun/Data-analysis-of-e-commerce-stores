@@ -140,6 +140,10 @@ def calc_fee(weight, express_company, area):
             return price_table[2]
         elif weight <= 3:
             return price_table[3]
+        elif weight <=6
+            weight = ceil(weight)
+            # 超过3kg的计算方式: 首重 + (重量-1)*续重，其中重量需要向上取整
+            return first_weight + (weight - 1) * additional_weight
         else:
             return None
             # weight = ceil(weight)
