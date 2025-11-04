@@ -443,7 +443,47 @@ def calc_fee(row):
         return None  # 不支持的快递公司返回None    
     
 def shipping_fee_calc():
-    area = st.text_input("请输入目的地省份（云南、广东、四川，例外：直辖市，深圳）")
+    # area = st.text_input("请输入目的地省份（云南、广东、四川，例外：直辖市，深圳）")
+    selected_option = st.selectbox(
+        label="请输入/选择目的地省份（例外：深圳）",
+        options=['北京',
+            '天津',
+            '安徽',
+            '河北',
+            '山东', 
+            '黑龙江',
+            '黑龙',
+            '吉林',
+            '辽宁',
+            '山西',
+            '江西',
+            '湖南',
+            '湖北',
+            '河南',
+            '江苏',
+            '上海',
+            '浙江',
+            '广东',
+            '深圳',
+            '福建',
+            '重庆',
+            '四川',
+            '陕西',
+            '内蒙',
+            '内蒙古',
+            '云南',
+            '广西',
+            '青海',
+            '甘肃',
+            '贵州',
+            '宁夏',
+            '海南',
+            '西藏',
+            '新疆'],  # 可传入列表、元组或DataFrame列
+        index=0,  # 默认选中第1个选项（索引从0开始）
+        key="unique_key"  # 组件唯一标识（多组件时避免冲突）
+    )
+    area = selected_option
     weight = st.number_input("请输入重量（kg）", min_value=0.00, max_value=9999.00, step=0.01, value=None)
     # express_company = st.selectbox("请选择快递公司", ("顺丰", "中通", "圆通", "韵达"))
     # 计算按钮
@@ -560,6 +600,7 @@ def shipping_bill_check():
             st.error("请检查上传文件并重新上传")
     elif uploaded_file is not None:
         st.error("请检查上传文件并重新上传")  
+
 
 
 
