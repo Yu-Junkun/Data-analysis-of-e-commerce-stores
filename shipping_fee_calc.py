@@ -534,7 +534,7 @@ def shipping_bill_check():
             df = df[required_cols]
             # workbook = pd.read_excel(uploaded_file, sheet_name='B2C明细', usecols=['物流单号', '映射物流公司', '省市区', '收入计费重量', '收入-快递费', '收入-操作费', '货品数量'])
             # 读取工作表中映射物流公司、省市区、物流单号、收入计费重量、收入-快递费列数据，合并成新dataframe
-            df = workbook[:-1].copy()
+            df = df[:-1].copy()
             df.loc[:, '物流'] = df['映射物流公司'].str[0:2]
             # 批量删除“省市区”列中的所有空格
             df["省市区"] = df["省市区"].str.replace(" ", "", regex=False)            
@@ -570,6 +570,7 @@ def shipping_bill_check():
         st.error("2请检查上传文件并重新上传")  
     else:
         st.error("3请检查上传文件并重新上传")
+
 
 
 
