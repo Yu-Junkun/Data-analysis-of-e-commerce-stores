@@ -12,6 +12,7 @@ import pandas as pd
 import numpy as np
 from math import ceil
 import streamlit as st
+import openpyxl
         
 # 构建快递费用字典，根据快递公司、地区、公斤段、首重、续重计算
 def calc_fee(row):
@@ -569,6 +570,7 @@ def shipping_bill_check():
         st.error("2请检查上传文件并重新上传")  
     else:
         st.error("3请检查上传文件并重新上传")
+
 
 
 
