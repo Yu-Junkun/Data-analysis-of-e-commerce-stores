@@ -564,12 +564,13 @@ def shipping_bill_check():
             st.dataframe(df_filtered1)
             st.write(f"操作费差异的订单有{len(df_filtered2)}条")
             st.dataframe(df_filtered2)
-        except Exception:
-            st.error("1请检查上传文件并重新上传")
+        except Exception as e:
+            st.error(f"错误: {str(e)}")
     elif uploaded_file is not None:
         st.error("2请检查上传文件并重新上传")  
     else:
         st.error("3请检查上传文件并重新上传")
+
 
 
 
