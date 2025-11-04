@@ -524,17 +524,9 @@ def shipping_bill_check():
     st.write("\t文件名称样例：元更时代x月账单_received-date_version.xlsx")
     if uploaded_file is not None and uploaded_file.name.endswith('.xlsx'):
         try:
-            try:
-                # 直接读取文件内容，不使用临时文件
-                df = pd.read_excel(uploaded_file, sheet_name='B2C明细')
-            except Exception as e:
-                st.error(f"错误: {str(e)}")
-            # 只保留需要的列
-            required_cols = ['物流单号', '映射物流公司', '省市区', '收入计费重量', '收入-快递费', '收入-操作费', '货品数量']
-            df = df[required_cols]
-            # workbook = pd.read_excel(uploaded_file, sheet_name='B2C明细', usecols=['物流单号', '映射物流公司', '省市区', '收入计费重量', '收入-快递费', '收入-操作费', '货品数量'])
+            workbook = pd.read_excel(uploaded_file, sheet_name='B2C明细', usecols=['物流单号', '映射物流公司', '省市区', '收入计费重量', '收入-快递费', '收入-操作费', '货品数量'])
             # 读取工作表中映射物流公司、省市区、物流单号、收入计费重量、收入-快递费列数据，合并成新dataframe
-            df = df[:-1].copy()
+            df = workbook[:-1].copy()
             df.loc[:, '物流'] = df['映射物流公司'].str[0:2]
             # 批量删除“省市区”列中的所有空格
             df["省市区"] = df["省市区"].str.replace(" ", "", regex=False)            
@@ -564,12 +556,11 @@ def shipping_bill_check():
             st.dataframe(df_filtered1)
             st.write(f"操作费差异的订单有{len(df_filtered2)}条")
             st.dataframe(df_filtered2)
-        except Exception as e:
-            st.error(f"错误: {str(e)}")
+        except Exception:
+            st.error("请检查上传文件并重新上传")
     elif uploaded_file is not None:
-        st.error("2请检查上传文件并重新上传")  
-    else:
-        st.error("3请检查上传文件并重新上传")
+        st.error("请检查上传文件并重新上传")  
+
 
 
 
