@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 '''
-@File    :   st_dy_xhs_live_data_upload.py
+@File    :   streamlit_main_program.py
 @Time    :   2025/04/02 10:50:36
 @Author  :   Junkun Yu
 @Version :   1.0
@@ -8,8 +8,6 @@
 '''
 
 import streamlit as st
-from shipping_fee_calc import calc_fee
-from live_data_function import *
 from shipping_fee_calc import *
 
 # 创建边栏
@@ -32,3 +30,4 @@ elif selected_tab == '华夏龙账单核对':
     shipping_bill_check()
 
     st.divider()
+
