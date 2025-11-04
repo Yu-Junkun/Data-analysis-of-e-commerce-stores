@@ -523,7 +523,12 @@ def shipping_bill_check():
     st.write("\t文件名称样例：元更时代x月账单_received-date_version.xlsx")
     if uploaded_file is not None and uploaded_file.name.endswith('.xlsx'):
         try:
-            workbook = pd.read_excel(uploaded_file, sheet_name='B2C明细', usecols=['物流单号', '映射物流公司', '省市区', '收入计费重量', '收入-快递费', '收入-操作费', '货品数量'])
+            # 直接读取文件内容，不使用临时文件
+            df = pd.read_excel(uploaded_file, sheet_name='B2C明细')
+            # 只保留需要的列
+            required_cols = ['物流单号', '映射物流公司', '省市区', '收入计费重量', '收入-快递费', '收入-操作费', '货品数量']
+            df = df[required_cols]
+            # workbook = pd.read_excel(uploaded_file, sheet_name='B2C明细', usecols=['物流单号', '映射物流公司', '省市区', '收入计费重量', '收入-快递费', '收入-操作费', '货品数量'])
             # 读取工作表中映射物流公司、省市区、物流单号、收入计费重量、收入-快递费列数据，合并成新dataframe
             df = workbook[:-1].copy()
             df.loc[:, '物流'] = df['映射物流公司'].str[0:2]
@@ -558,4 +563,5 @@ def shipping_bill_check():
         except Exception:
             st.error("请检查上传文件并重新上传")
     elif uploaded_file is not None:
+
         st.error("请检查上传文件并重新上传")  
